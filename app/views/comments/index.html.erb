@@ -1,0 +1,108 @@
+<div id="site_list"> 
+<div id="col1">
+
+<div id="lugares">
+<h1>
+  <% if @localidad %>
+  <% if tipocomentarioconid(@tipo) %>
+  <%= link_to @localidad, site_path(params[:site_id]) %> > <%= tipocomentarioconid(@tipo) %>
+  <% else %>
+  Sitios en <%= link_to @localidad, site_path(params[:site_id]) %>
+  <% end %>
+  <% else %>
+  <%= @titulo %>
+  <% end %>
+</h1>
+</div>
+<% if @comments.empty? %>
+   <p>Vaya, parece que nadie ha compartido nada. ¡Sé el primero pulsando <%= link_to 'aquí', :controller => "comments", :action => "new", :site_id => params[:site_id], :tipocomentario => params[:tipocomentario ] %>!</p>
+<% else %>
+  <table> 
+
+  <% @comments.each do |comment| %>
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>"> 
+  
+     <% if comment.image_url.nil? %>
+     <% else %>
+      <td> 
+        <%= link_to image_tag(comment.image_url, :class => 'list_image'), comment if comment.image_url?%>
+      </td> 
+	<%end %>
+
+      <td class="list_description"> 
+        <dl> 
+	  <% if comment.user_id %>
+          <dt><%= link_to comment.nombre, comment %></dt>            
+        </dl> 
+      </td> 
+
+ <% if current_user %>
+ <% if comment.user_id == current_user.id%>
+      <td class="list_actions">  
+        <%= link_to 'Editar', edit_comment_path(comment) %><br/> 
+        <%= link_to 'Eliminar', comment, 
+                    :confirm => '¿Estás seguro?',
+                    :method => :delete %>
+      </td> 
+ <% end %>
+ <% end %>
+          <% end %>
+
+    </tr> 
+  <% end %>
+  </table> 
+
+<br />
+<%= link_to ' Añade tu sitio ',{ :controller => "comments", :action => "new", :site_id => params[:site_id], :tipocomentario => params[:tipocomentario ]}, :class => "ba2" %>
+<br />
+<br />
+<br />
+</div>
+<%if @comments_turisticos.empty? %>
+<%else %>
+<div id="col2">
+
+<h1>Si eres turista no te puedes perder:</h1>
+  <table> 
+  <% @comments_turisticos.each do |comment| %>
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>"> 
+  
+     <% if comment.image_url.nil? %>
+     <% else %>
+      <td> 
+        <%= link_to image_tag(comment.image_url, :class => 'list_image'), comment if comment.image_url?%>
+      </td> 
+	<%end %>
+
+      <td class="list_description"> 
+        <dl> 
+	  <% if comment.user_id %>
+          <dt><%= link_to comment.nombre, comment %></dt>            
+        </dl> 
+      </td> 
+
+ <% if current_user %>
+ <% if comment.user_id == current_user.id%>
+      <td class="list_actions">  
+        <%= link_to 'Editar', edit_comment_path(comment) %><br/> 
+        <%= link_to 'Eliminar', comment, 
+                    :confirm => '¿Estás seguro?',
+                    :method => :delete %>
+      </td> 
+ <% end %>
+ <% end %>
+          <% end %>
+
+    </tr> 
+  <% end %>
+  </table> 
+</div>
+<%end%>
+<%end%>
+
+</div> 
+
+
+
+
+

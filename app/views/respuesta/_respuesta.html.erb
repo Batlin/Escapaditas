@@ -1,0 +1,33 @@
+<div id = "respuestas">
+<% fecha = respuesta.updated_at.to_date %>
+
+<div class = "intro">
+<% if User.find_by_id(respuesta.user_id) %>
+<% nombre = User.find(respuesta.user_id).name %>
+
+El <%= fecha.strftime("%d-%m-%Y") %>, <%= link_to(nombre, :controller => "users", :action => "show", :id => User.find(respuesta.user_id).id) %> dijo:
+<% else %>
+El <%= fecha.strftime("%d-%m-%Y") %>, usuario eliminado dijo:
+<% end %>
+
+</div>
+<div class = "respuesta">
+  <%= respuesta.description %>
+</div>
+
+Número de +1: <%= respuesta.flaggings.length %>
+<br />
+
+<% if current_user %>
+<% if respuesta.user == current_user %>
+      <td class="list_actions">  
+        <%= link_to 'Editar', edit_respuestum_path(respuesta) %> | 
+        <%= link_to 'Eliminar', respuesta, 
+                    :confirm => '¿Estás seguro?',
+                    :method => :delete %>
+      </td> 
+<% else %>
+<%= toggle_opinion_button(respuesta, @current_user) %>
+<% end %>
+<% end %>
+</div>

@@ -1,0 +1,42 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+  <title>Escapaditas.com</title> 
+<!-- START:stylesheet --> 
+        <!-- carga de las hojas de estilo -->
+  <%= stylesheet_link_tag "scaffold" %>
+  <%= stylesheet_link_tag "movil", :media => "all", :title => "movil" %><!-- <label id="code.slt"/> --> 
+
+<%= javascript_include_tag 'jquery.min.js', 'jquery_ujs.js' %>
+
+<!-- END:stylesheet --> 
+
+<%= csrf_meta_tag %>
+<meta name = "viewport" content = "width = device-width">
+
+
+</head> 
+
+<body id="planet"> 
+
+    <div id="barra"> 
+      <%= link_to "Inicio", root_path %>
+      <%= link_to "Explorar",  planet_explorar_path %>
+      <%= link_to "Provincias",  types_path %>
+        <%= link_to "Identifícate", 
+               new_user_session_path %>
+    </div>
+
+    <div id="main"> 
+
+
+<div id="main_contenido">
+
+      <%= yield %><!-- <label id="code.depot.e.include"/> --> 
+
+</div>
+    </div> 
+
+
+</body> 
+</html> 

@@ -1,0 +1,7 @@
+<h1>Lista de usuarios</h1>
+
+<% @users.each do |user| %>
+<div id="provincias">
+	<dt><%= link_to(user.name, :controller => "users", :action => "show", :id => user.id) %></dt> 
+</div>
+<% end %>

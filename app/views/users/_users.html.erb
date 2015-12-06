@@ -1,0 +1,17 @@
+<div id="site_list"> 
+  <h1>Usuarios más activos</h1> 
+  <% @users = User.find(:all, :order => 'karma DESC', :limit => '5') %>
+  <table> 
+  <% @users.each do |user| %>
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>"> 
+ 
+      <td class="list_description"> 
+        <dl> 
+          <dt><%= link_to(user.name, :controller => "users", :action => "show", :id => user.id) %></dt> 
+        </dl> 
+      </td>
+ 
+    </tr> 
+  <% end %>
+  </table> 
+</div> 

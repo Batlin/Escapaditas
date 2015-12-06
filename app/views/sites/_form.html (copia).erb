@@ -1,0 +1,169 @@
+<body id="planet" onload="initialize()"> 
+<%= form_for(@site) do |f| %>
+  <% if @site.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@site.errors.count, "error") %> prohibited this site from being saved:</h2>
+
+      <ul>
+      <% @site.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div id="container2">
+<div id="container1">
+
+<div id="col1">
+
+  Provincia a la que pertenece: <br/>
+  <div class="field">
+    <% types = Type.find(:all, :order => :name) %>
+
+<%= collection_select(:site, :type_id, types, :id, :name, {:prompt=>false}, {:class=>'styled-select'}) %>
+  </div>
+  Tipo de turismo: <br />
+  <div class="field">
+<%= f.select(:tipositio, options_for_select([['Ciudad', 2], ['Rural', 3], ['Playa', 4]], @site.tipositio), {:include_blank => false}, :class => 'styled-select')%>
+  </div>
+  <div class="field">
+    Nombre de la localidad:<br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    Descripción (Opcional):<br />
+    <%= f.text_area :description, :rows => 4 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.field :zoom %><br />
+    <%= f.text_field :zoom %>
+  </div>
+  <div class="field">
+    URL de la imagen (Opcional):<br />
+    <%= f.text_field :image_url %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Confirmar", :class => 'botonaccion' %>
+  </div>
+</div>
+<div id="col2">
+<div id="map_canvas"></div>
+<div>
+    <input id="address" type="textbox" value="">
+    <input type="button" value="Geocode" onclick="codeAddress()">
+</div>
+</div>
+
+</div>
+</div>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&region=ES"></script>
+<script type="text/javascript">
+  var geocoder;
+  var map;
+  var marker;
+
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    
+    if(document.getElementById("site_latitude").value!=0){
+
+    var mylat = document.getElementById("site_latitude").value; 
+    var mylong = document.getElementById("site_longitude").value;
+    var zoom = 12;
+    var latlng = new google.maps.LatLng(mylat, mylong);
+    var myOptions = {
+      zoom: zoom,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    marker = new google.maps.Marker({
+      position: latlng, 
+      map: map,
+      draggable: true
+    });
+
+}else{
+    var mylat = 40;
+    var mylong = -3;
+    var zoom = 5;
+
+    var latlng = new google.maps.LatLng(mylat, mylong);
+    var myOptions = {
+      zoom: zoom,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+}
+    
+
+
+ google.maps.event.addListener(map, 'click', function(event) {
+
+    var myLatLng = event.latLng;
+    var lat = myLatLng.lat();
+    var lng = myLatLng.lng();
+
+    document.getElementById("site_latitude").value = lat;
+    document.getElementById("site_longitude").value = lng;
+
+    marker = new google.maps.Marker({
+      position: event.latLng, 
+      map: map,
+      draggable: true
+    });
+ });
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    var myLatLng = marker.getPosition();
+    var lat = myLatLng.lat();
+    var lng = myLatLng.lng();
+
+    document.getElementById("site_latitude").value = lat;
+    document.getElementById("site_longitude").value = lng;
+
+  });
+
+  }
+
+  function codeAddress() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+
+    var myLatLng = results[0].geometry.location;
+    var lat = myLatLng.lat();
+    var lng = myLatLng.lng();
+
+        document.getElementById("site_latitude").value = lat;
+	document.getElementById("site_longitude").value = lng;
+         marker = new google.maps.Marker({
+            map: map, 
+            position: results[0].geometry.location,
+            draggable: true
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+
+</script>
+
+<% end %>
+</body>

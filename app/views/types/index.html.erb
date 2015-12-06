@@ -1,0 +1,14 @@
+  <h1>Provincias</h1> 
+ 
+  <% @types.each do |type| %>
+<div id="provincias">
+          <dt><%= link_to type.name, 'types/'+type.id.to_s+'/sites' %></dt> 
+</div>
+  <% end %>
+
+<br />
+<div id="provincias_añade">
+
+<%= link_to 'Añade tu provincia', new_type_path %>
+</div>
+

@@ -1,0 +1,33 @@
+<div id="site_list"> 
+  <h1>Localidades más populares</h1> 
+  <% @sites = Site.find(:all, :order => 'visits DESC', :limit => '5') %>
+  <table> 
+  <% @sites.each do |site| %>
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>"> 
+ 
+      <td> 
+        <%= link_to image_tag(site.image_url, :class => 'list_image'), site if  site.image_url? %>
+      </td> 
+ 
+      <td class="list_description"> 
+        <dl> 
+          <dt><%= link_to site.name, site %></dt> 
+          <dd><%= truncate(strip_tags(site.description),
+                 :length => 40) %></dd>
+        </dl> 
+      </td>
+ 
+      <td class="list_actions"> 
+	<% if current_user %>
+        <% if site.user == current_user %>
+          <%= link_to 'Editar', edit_site_path(site) %><br/>
+          <%= link_to 'Eliminar', site, 
+                      :confirm => '¿Estás seguro?',
+                      :method => :delete %>
+        <% end %>
+        <% end %>
+      </td> 
+    </tr> 
+  <% end %>
+  </table> 
+</div> 

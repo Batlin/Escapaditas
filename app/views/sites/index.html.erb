@@ -1,0 +1,48 @@
+<div id="site_list">
+  <% if @provincia %> 
+  <h1>Localidades en <%= @provincia %></h1> 
+Filtros: <%= link_to('Playa', :controller => "sites", :action => "index", :tipositio => 4, :type_id => params[:type_id]) %>, <%= link_to('Ciudad', :controller => "sites", :action => "index", :tipositio => 2, :type_id => params[:type_id]) %> o <%= link_to('Rural', :controller => "sites", :action => "index", :tipositio => 3, :type_id => params[:type_id]) %>
+<br />
+<br />
+  <% elsif @tipo %>
+  <h1>Localidades <%= tipositio(@tipo) %></h1>  
+  <% else %>
+  <h1>Localidadess <%= @tipo %></h1> 
+<% end %> 
+<%= link_to ' Añade una nueva localidad ',{ :controller => "sites", :action => "new", :type_id => params[:type_id], :tipositio => params[:tipositio]}, :class => "ba2" %>
+</br>
+</br>
+  <table> 
+  <% @sites.each do |site| %>
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>"> 
+ 
+      <td> 
+        <%= link_to image_tag(site.image_url, :class => 'list_image'), site if site.image_url?%>
+      </td> 
+ 
+      <td class="list_description"> 
+        <dl> 
+          <dt><%= link_to site.name, site %></dt> 
+          <dd><%= truncate(strip_tags(site.description),
+                 :length => 40) %></dd>
+        </dl> 
+      </td>
+ 
+      <td class="list_actions"> 
+ <% if current_user %>
+        <% if site.user == current_user %>
+          <%= link_to 'Editar', edit_site_path(site) %><br/>
+          <%= link_to 'Eliminar', site, 
+                      :confirm => '¿Estás seguro?',
+                      :method => :delete %>
+        <% end %>
+        <% end %>
+      </td> 
+    </tr> 
+  <% end %>
+  </table> 
+</div> 
+ 
+<br /> 
+
+

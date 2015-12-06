@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Description:</b>
+  <%= @respuestum.description %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%= @respuestum.comment_id %>
+</p>
+
+
+<%= link_to 'Editar', edit_respuestum_path(@respuestum) %> |
+<%= link_to 'Volver atrás', respuesta_path %>

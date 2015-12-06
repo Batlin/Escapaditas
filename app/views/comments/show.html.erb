@@ -1,0 +1,100 @@
+<body id="planet" onload="displayMapa()"> 
+<div id="col2">
+<div id="map_canvas"></div>
+<h2>Datos</h2>
+
+<span>
+<b>Latitud:</b>
+<%= @comment.latitude %>
+</span>
+
+<span>
+<b>Longitud:</b>
+<%= @comment.longitude %>
+</span>
+<br/>
+Su visita se recomienda en: <%= getestacion(@comment) %>
+</div>
+
+<div id="col1">
+<div id="lugares">
+<p>
+<% if current_user %>
+<% if @comment.user == current_user %>
+<h1>   <%= link_to Site.find(@comment.site_id).name, site_path(@comment.site_id) %> > <%= link_to tipocomentario(@comment), :controller => "comments", :action => "index", :site_id => @comment.site_id, :tipocomentario => @comment.tipocomentario %> > <%= @comment.nombre %> </h1>
+
+<table border="0">
+<tr>
+<td>
+<%= button_to "Editar", edit_comment_path(@comment), {:class => "botonaccion", :method => :get} %>
+</td>
+
+<td><%= button_to "Eliminar", @comment, {:class => "botonaccion", :confirm => '¿Estás seguro?', :method => :delete} %>
+</td>
+</tr>
+</table>
+<% else %>
+<h1>   <%= link_to Site.find(@comment.site_id).name, site_path(@comment.site_id) %> > <%= link_to tipocomentario(@comment), :controller => "comments", :action => "index", :site_id => @comment.site_id, :tipocomentario => @comment.tipocomentario %> > <%= @comment.nombre %></h1>
+<% end %>
+<% end %>
+</p>
+</div>
+
+<%= image_tag(@comment.image_url, :class => 'comment_image') if @comment.image_url? %>
+
+<h2>Descripción</h2>
+<p>
+  <b>Descubierto por:</b>
+<% if @user %>
+<% nombre = User.find(@comment.user_id).name %>
+
+<%= link_to(nombre, :controller => "users", :action => "show", :id => User.find(@comment.user_id).id) %>, quien comparte con nosotros su experiencia:
+<% else %>
+Usuario eliminado, quien comparte con nosotros su experiencia:
+<% end %>
+</p>
+<p>
+  <%= @comment.comment %>
+</p>
+
+
+</div>
+<div id ="despuescol">
+<h2> Opiniones </h2>
+<%= render :partial => "respuesta/respuesta",
+           :collection => @comment.respuesta %>
+
+<a href="#" id="mostrar">Añada su opinión</a>  
+<div id="caja">  
+<%= render "respuesta/form2" %>
+</div>  
+</div>
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+
+function displayMapa() {
+
+	var mylat = <%= @comment.latitude %>
+	var mylong = <%= @comment.longitude %>
+
+	var latlng = new google.maps.LatLng(mylat, mylong);
+
+	var myOptions = {
+			zoom:     <%= @comment.zoom %>, 
+			center: latlng, 
+			mapTypeId: google.maps.MapTypeId.ROADMAP 
+	};
+
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
+	var marker = new google.maps.Marker({
+		position: latlng,
+		map: map
+	});
+
+}
+
+</script>
+</body>

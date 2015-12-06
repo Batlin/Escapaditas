@@ -1,0 +1,29 @@
+<div id = "lugares">
+<h1><%= link_to('Lista de usuarios', users_path) %> > <%= @user.name %> </h1>
+
+Nombre de usuario: <%= @user.name %>
+<br />
+<% fecha = @user.created_at.to_date %>
+Fecha de registro: <%= fecha.strftime("%d-%m-%Y") %>
+<br />
+Karma: <%= @user.karma %>
+<br />
+Ver sitios creados por este user
+<%= link_to('aquí', :controller => "sites", :action => "index", :user_id => @user.id) %>
+<br />
+Este user ha estado en:
+<% @sites = Site.find(:all) %>
+<% @sites.each do |site| %>
+<% if @user.flagged?(site, :estado) %>
+	<%= site.name + ", "%>
+<% end %>
+<% end %>
+
+<br />
+
+Imagen:
+<br />
+<%= image_tag(@user.image_url, :class => 'site_image') if @user.image_url? %>
+
+<br />
+</div>

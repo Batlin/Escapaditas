@@ -1,0 +1,16 @@
+<h1>¡Haz tu búsqueda!</h1>
+    <div id="busqueda_ppal">
+      <%= form_tag(search_sites_path, :method => "get") do %>
+      <%= text_field_tag :q, nil, :placeholder => '¿A dónde quieres escaparte?', :size => 50, :class => "btn" %>
+      <% end %>
+    </div> 
+
+<div id="separacion">
+</div>
+<%= render :partial => "sites/localidades" %>
+
+<div id="separacion">
+</div>
+
+<%= render :partial => "users/users" %>
+

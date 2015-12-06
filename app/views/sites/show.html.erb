@@ -1,0 +1,130 @@
+<body id="planet" onload="displayMapa()"> 
+<div id="site">
+
+<div id="col2">
+<div id="map_canvas"></div>
+<h2>Datos</h2>
+
+<span>
+
+<b>Descubierto por:</b>
+
+<% if @user %>
+<% nombre = User.find(@site.user_id).name %>
+
+<%= link_to(nombre, :controller => "users", :action => "show", :id => User.find(@site.user_id).id) %>
+<% else %>
+Usuario eliminado
+<% end %>
+
+</span>
+
+<span>
+<b>Tipo de turismo: </b>
+<%= link_to(tipositio(@site), :controller => "sites", :action => "index", :tipositio => @site.tipositio) %>
+</span>
+<br />
+
+<span>
+<b>Latitud:</b>
+<%= @site.latitude %>
+</span>
+
+<span>
+<b>Longitud:</b>
+<%= @site.longitude %>
+</span>
+
+<br/>
+
+<b>Visitas:</b>
+<%= @site.visits %>
+
+<br/>
+<br/>
+<% if @current_user %>
+<div id="site_list">
+<div id="ba2">
+<%= toggle_heestado_button(@site, @current_user) %>
+</div>
+</div>
+<% end %>
+</div>
+
+<div id="lugares">
+<div id="col1">
+<h1><%= link_to @site.type.name, '../types/'+@site.type_id.to_s+'/sites' %> > <%= @site.name %></h1> 
+<% if current_user %>
+<% if @site.user == current_user %>
+
+<table border="0">
+<tr>
+<td>
+<%= button_to "Editar", edit_site_path(@site), {:class => "botonaccion", :method => :get} %>
+</td>
+
+<td><%= button_to "Eliminar", @site, {:class => "botonaccion", :confirm => '¿Estás seguro?', :method => :delete} %>
+</td>
+</tr>
+</table>
+
+<% else %>
+
+<% end %>
+<% end %>
+
+<%= image_tag(@site.image_url, :class => 'site_image') if @site.image_url? %>
+
+<p><h2>Descubre <%= @site.name %></h2></p>
+ 	<p><b><%= link_to('Sitios que ver', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 2) %></b> | 
+ 	<b><%= link_to('Monumentos', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 3) %></b> |
+ 	<b><%= link_to('Museos', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 4) %></b> | 
+        <b><%= link_to('Parques', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 9) %></b></p> 
+ 	<p><b><%= link_to('Hoteles', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 5) %></b> |
+ 	<b><%= link_to('Casas rurales', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 6) %></b> |
+ 	<b><%= link_to('Sitios donde comer', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 7) %></b> |
+ 	<b><%= link_to('De compras', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 8) %></b></p>
+        <p>Información útil: <b><%= link_to('Transporte', :controller => "comments", :action => "index", :site_id => @site.id, :tipocomentario => 10) %></b></p>
+        <p><b><%= link_to('Ver todo', :controller => "comments", :action => "index", :site_id => @site.id) %></b></p>
+</div> 
+
+<div id="despuescol">
+<% if @site.description.present? %>
+<h2>Descripción</h2> 
+<p><%=@site.description %></p>
+<% end %>
+
+
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+function displayMapa() {
+
+	var mylat = <%= @site.latitude %>
+	var mylong = <%= @site.longitude %>
+
+	var latlng = new google.maps.LatLng(mylat, mylong);
+
+	var myOptions = {
+			zoom:     <%= @site.zoom %>, 
+			center: latlng, 
+			mapTypeId: google.maps.MapTypeId.ROADMAP 
+	};
+
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
+	var marker = new google.maps.Marker({
+		position: latlng,
+		map: map,
+		title: " <%= @site.name.to_s %>  "
+	});
+
+}
+
+</script>
+</body>

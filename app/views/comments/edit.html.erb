@@ -1,0 +1,11 @@
+<h1>Edita el sitio</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', @comment %> |
+<% if @comment.site_id %>
+<%= link_to 'Volver atrás', site_comments_path(@comment.site_id) %>
+<% else %>
+<%= link_to 'Volver atrás', "javascript:history.back()" %>
+<% end %>
+

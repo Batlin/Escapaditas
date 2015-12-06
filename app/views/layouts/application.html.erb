@@ -1,0 +1,157 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+  <title>Escapaditas.com</title> 
+<!-- START:stylesheet --> 
+        <!-- carga de las hojas de estilo -->
+  <%= stylesheet_link_tag "scaffold" %>
+  <%= stylesheet_link_tag "planet", :media => "all", :title => "web" %><!-- <label id="code.slt"/> --> 
+  <%= stylesheet_link_tag "movil", :media => "all", :title => "movil" %><!-- <label id="code.slt"/> --> 
+
+<%= javascript_include_tag'jquery.min.js', 'jquery_ujs.js', 'styleswitcher.js' %>
+
+
+<script type="text/javascript">
+var mobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())); 
+
+if (mobile)
+{
+ $nombre = 'movil';
+}
+else
+{
+  $nombre = 'web';
+}
+
+ setActiveStyleSheet($nombre); return false;
+
+</script>
+<!-- END:stylesheet --> 
+
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&region=ES"></script>
+
+<%= csrf_meta_tag %>
+
+<script type="text/javascript"> 
+$(function()
+{
+ 
+$("#mostrar").click(function(event) {
+event.preventDefault();
+$("#caja").slideToggle();
+});
+ 
+$("#caja a").click(function(event) {
+event.preventDefault();
+$("#caja").slideUp();
+});
+});
+</script> 
+</head> 
+
+<body id="planet"> 
+
+      <script src="../javascripts/modernizr.custom.80028.js"></script>
+      <div id="notice">
+
+      <%= content_tag(:div, flash[:alert], :id => "flash_alert") if flash[:alert] %>
+
+      <% if notice %>
+	<%= notice %> 
+	<a id="close">[close]</a> 
+      <% end %>
+      </div>
+	<script>
+	   $("#close").click(function() {
+	     $("#notice").hide();
+	   });
+  	</script>
+
+  <div id="banner">
+<%= link_to "escapaditas.com", planet_index_path %><!-- <label id="code.depot.e.title"/> --> 
+<div class="subtitulo">
+donde comienzan tus planes
+</div>
+
+  </div> 
+    <div id="barra"> 
+      <%= link_to "Inicio", root_path %>
+      <%= link_to "Explorar",  planet_explorar_path %>
+      <%= link_to "Provincias",  types_path %>
+      <%= link_to "Contacto", planet_contacto_path %>
+      <a href="#" onclick="setActiveStyleSheet('movil'); return false;">movil</a>
+      <a href="#" onclick="setActiveStyleSheet('web'); return false;">web</a>
+
+    <div class="user">
+      <% if current_user %>
+        <%= link_to current_user.name, 
+               edit_user_registration_path %> |
+        <%= link_to "Cerrar sesión", 
+               destroy_user_session_path %>
+       <% if current_user.role.to_s == 666.to_s %>
+	Eres Admin
+ 	<% end %>
+      <% else %>
+        <%= link_to "Iniciar sesión", 
+               new_user_session_path %>
+      <% end %>
+    </div>
+    </div> 
+
+
+    <% if(request.request_uri != planet_index_path && request.request_uri != root_path) %>
+    <div id="busqueda">
+      <%= form_tag(search_sites_path, :method => "get", :class => "btn") do %>
+      <%= text_field_tag :q, nil, :placeholder => 'Busca cualquier lugar', :size => 25 %>
+      <%= image_submit_tag("search2.png") %>
+      <% end %>
+    </div> 
+    <% end %>
+    
+    <div id="main"> 
+
+<% if(request.request_uri == planet_index_path || request.request_uri == root_path) %>
+      <% if !current_user %>
+<div id="col1">
+<div id="registrate">
+<br />
+<h1>¿Qué es esto?</h1>
+<li>Escapaditas.com es una nueva red social en la que los usuarios comparten sus experiencias con otros con el fin de convertirse en lugar de referencia para todos aquellos que buscan información sobre su próximo viaje o simplemente buscan planes interesantes en su ciudad.</li>
+<li>Es muy sencillo de usar, ¿por qué no empiezas ahora? Regístrate, explora nuevos sitios, planes y... ¡Comparte!</li>
+<h1>
+<%= button_to "Crear una cuenta", new_registration_path(:user), {:class => "minimal", :method => :get} %>
+</h1>
+</div>
+</div>
+
+<div id="col2">
+<div id="registrate">
+<br />
+<h1>Pasos a seguir</h1>
+<div class="listacosas">
+<li>1. Créate una cuenta, ¡es totalmente gratuito!</li>
+<li>2. Descubre nuevos rincones que querrás visitar, nuevos planes que hacer en tu ciudad, obtén más información sobre tu próximo viaje...</li>
+<li>3. ¡Y no te olvides de compartir tus experiencias para ayudar a otros!</li>
+</div>
+
+</div>
+</div>
+<% end %>
+<% end %>
+
+<div id="main_contenido">
+
+      <%= yield %><!-- <label id="code.depot.e.include"/> --> 
+
+</div>
+    </div> 
+
+    <div id="pie"> 
+	<div class="texto">
+		 <%= link_to "Acerca de...", planet_acercade_path %> <%= link_to "Términos", planet_terminos_path %> <%= link_to "Privacidad", planet_privacidad_path %>
+	</div>
+    </div> 
+
+</body> 
+</html> 
