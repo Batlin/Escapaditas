@@ -1,82 +1,43 @@
 module CommentsHelper
 
  def tipocomentario(comment)
-	if comment.tipocomentario==2
-	tipo = "Sitios que hay que ver"
+ 	tipo = case comment.tipocomentario
+	 	when 2 then "Sitios que hay que ver"
+	 	when 3 then "Monumentos"
+	 	when 4 then "Museos"
+	 	when 5 then "Hoteles"
+	 	when 6 then "Casas rurales"
+	 	when 7 then "Sitios donde comer"
+	 	when 8 then "De compras"
+	 	when 9 then "Parques"
+	 	when 10 then "Transporte"
 	end
-	if comment.tipocomentario==3
-	tipo = "Monumentos"
-	end 
-	if comment.tipocomentario==4
-	tipo = "Museos"
-	end 
-	if comment.tipocomentario==5
-	tipo = "Hoteles"
-	end 
-	if comment.tipocomentario==6
-	tipo = "Casas rurales"
-	end 
-	if comment.tipocomentario==7
-	tipo = "Sitios donde comer"
-	end 
-	if comment.tipocomentario==8
-	tipo = "De compras"
-	end 
-	if comment.tipocomentario==9
-	tipo = "Parques"
-	end 
-	if comment.tipocomentario==10
-	tipo = "Transporte"
-	end 
+
 	return tipo
 end
  def tipocomentarioconid(id)
-	if id.to_s==2.to_s
-	tipo = "Sitios que hay que ver"
-	end
-	if id.to_s==3.to_s
-	tipo = "Monumentos"
-	end 
-	if id.to_s==4.to_s
-	tipo = "Museos"
-	end 
-	if id.to_s==5.to_s
-	tipo = "Hoteles"
-	end 
-	if id.to_s==6.to_s
-	tipo = "Casas rurales"
-	end 
-	if id.to_s==7.to_s
-	tipo = "Sitios donde comer"
-	end 
-	if id.to_s==8.to_s
-	tipo = "De compras"
-	end 
-	if id.to_s==9.to_s
-	tipo = "Parques"
-	end 
-	if id.to_s==10.to_s
-	tipo = "Transporte"
+ 	tipo = case id.to_s
+	 	when 2 then "Sitios que hay que ver"
+	 	when 3 then "Monumentos"
+	 	when 4 then "Museos"
+	 	when 5 then "Hoteles"
+	 	when 6 then "Casas rurales"
+	 	when 7 then "Sitios donde comer"
+	 	when 8 then "De compras"
+	 	when 9 then "Parques"
+	 	when 10 then "Transporte" 		
 	end 
 	return tipo
 end
 
  def getestacion(comment)
-	if comment.estacion==1
-	tipo = "Cualquier epoca del ano"
+ 	tipo = case comment.estacion
+	 	when 1 then "Cualquier epoca"
+		when 2 then "Primavera"
+		when 3 then "Verano"
+		when 4 then "Otono"
+		when 5 then "Invierno"
 	end
-	if comment.estacion==2
-	tipo = "Primavera"
-	end 
-	if comment.estacion==3
-	tipo = "Verano"
-	end 
-	if comment.estacion==4
-	tipo = "Otono"
-	end 
-	if comment.estacion==5
-	tipo = "Invierno"
-	end 
 
 	return tipo
 end
